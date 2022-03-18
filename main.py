@@ -3,7 +3,7 @@ from multiprocessing import Process, Value, Array, cpu_count
 from src.enum import userCommand, detectResult, wallEState
 from src.manager.userManager import userManager
 from src.manager.modelManager import modelManager
-from src.manager.stateManager import stateManager
+from src.manager.stateManager import StateManager
 import time
 
 def globalUpdate():
@@ -16,14 +16,16 @@ if __name__ == '__main__':
     cpu_count = cpu_count()
     print("This machine has {} cpus.".format(cpu_count))
     
+    stateManager = StateManager()
+    
     # Sharing State
     userControl = Value('i', NOCOMMAND) # user command
-    modelResult = Array('d', [EMPTY, 0.0, 0.0]) # model result
+    modelResult = Array('d', [EMPTY, 0.0, 0.0, 0]) # model result [Yes/No, x, y, dataID]
     state = Value('i', USERCONTROL) # robot state
     # Define process
     userProcess = Process(target=userManager, args=(userControl, ))
     modelProcess = Process(target=modelManager, args=(modelResult, ))
-    stateProcess = Process(target=stateManager, args=(userControl, modelResult, state))
+    stateProcess = Process(target=stateManager.stateManagerserver, args=(userControl, modelResult, state))
     # Start the processes
     userProcess.start()
     modelProcess.start()
