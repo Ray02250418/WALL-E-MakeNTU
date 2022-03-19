@@ -25,16 +25,16 @@ class StateManager:
         self.globalUpdate()
         print("Starting state manager server.")
         print("In state manager server: ", AUTOMATIC)
-        # while True:
-        #     DataID = modelResult[3]
+        while True:
+            DataID = modelResult[3]
             
-        #     if DataID != self.prevDataID:    # Check if updated
-        #         self.detectQueue.appendleft(modelResult[0])
-        #     else: 
-        #         time.sleep(1/self.fetchFrequency)
-        #         continue
+            if DataID != self.prevDataID:    # Check if updated
+                self.detectQueue.appendleft(modelResult[0])
+            else: 
+                time.sleep(1/self.fetchFrequency)
+                continue
                 
-        time.sleep(1/self.fetchFrequency)
+            time.sleep(1/self.fetchFrequency)
 
 
 if __name__ == "__main__":
